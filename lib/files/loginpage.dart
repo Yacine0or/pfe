@@ -123,8 +123,7 @@ class _loginpage extends State<LoginPage> {
                                               _password = value;
                                             });
                                           },
-                                          regEx:
-                                              "^[a-zA-Z0-9.a-zA-Z0-9.!# %&'*+-/=?^_`{|}~]+[a-zA-Z0-9]+.[a-zA-Z]+",
+                                          regEx:"",
                                           hinttext: 'Password')),
                                 ],
                               ),
@@ -142,13 +141,9 @@ class _loginpage extends State<LoginPage> {
                                     "email======> $_email password======> $_password");
 
                                 _loginformkey.currentState!.save();
-                                // Navigator.pushReplacement(
-                                //  context,
-                                // MaterialPageRoute(
-                                // builder: (context) => MyHomePage()),
-                                // );
+
                                 _auth.loginUsingEmailAndPassword(
-                                    _email!, _password!);
+                                    _email!, _password??"",context);
                                 print("email $_email password $_password");
                               }
                             },

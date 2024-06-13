@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project2/files/students_info.dart';
+import '../files/scrolingpage.dart';
 import '../services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../files/students_info.dart';
@@ -10,7 +11,7 @@ import '../files/students_info.dart';
 class AuthProvider extends ChangeNotifier {
   late final FirebaseAuth _auth;
   late final DatabaseService _databaseService;
-  late students user;
+  late Students user;
   AuthProvider() {
     _auth = FirebaseAuth.instance;
     _databaseService = GetIt.instance.get<DatabaseService>();
@@ -22,7 +23,7 @@ class AuthProvider extends ChangeNotifier {
           (_snapshot) {
             Map<String, dynamic> _userdata =
                 _snapshot.data()! as Map<String, dynamic>;
-            user = students.fromJSON(
+            user = Students.fromJSON(
               {
                 "uid": _user.uid,
                 "nom": _userdata["nom"],
@@ -41,11 +42,16 @@ class AuthProvider extends ChangeNotifier {
     });
   }
   Future<void> loginUsingEmailAndPassword(
-      String _email, String _password) async {
+      String _email, String _password,BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(
           email: _email, password: _password);
       print(_auth.currentUser);
+      Navigator.pushReplacement(
+       context,
+       MaterialPageRoute(
+       builder: (context) => MyHomePage()),
+      );
     } on FirebaseAuthException {
       print("error login user into firebase");
     } catch (e) {

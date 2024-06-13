@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class students {
+class Students {
   final String uid;
   final String nom;
   final String speciality;
@@ -8,15 +8,15 @@ class students {
 
   final String prenom;
   final String email;
-  students(
+  Students(
       {required this.group,
       required this.speciality,
       required this.email,
       required this.uid,
       required this.nom,
       required this.prenom});
-  factory students.fromJSON(Map<dynamic, dynamic> json) {
-    return students(
+  factory Students.fromJSON(Map<dynamic, dynamic> json) {
+    return Students(
         uid: json["uid"],
         nom: json["nom"],
         prenom: json["prenom"],

@@ -1,23 +1,4 @@
-import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
-/*import 'package:flutter/material.dart';
-import 'package:project2/loginpage.dart';
-import './files/splash_pages.dart ';
-
-void main() async {
-  /*MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    )*/
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  //splashpages(key: UniqueKey(), onInitializationComplete: () {})
-  runApp(
-   Scaffold(body: LoginPage(),)
-  );
-}
-*/
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -30,9 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:project2/files/splash_pages.dart';
 import 'package:project2/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import '../services/could_storage.dart';
-import '../files/splash_pages.dart';
-import '../providers/auth_provider.dart';
+
 
 /*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
