@@ -30,15 +30,19 @@ class _ScaneState extends State<Scane> {
         child: AiBarcodeScanner(
           controller: controller,
           onDetect: (BarcodeCapture barcodeCapture) async{
-            if(barcodeCapture.barcodes.first.displayValue != null && barcodeCapture.barcodes.first.displayValue.toString() == widget.qr){
+            if(barcodeCapture.barcodes.first.displayValue != null ){
+              if( barcodeCapture.barcodes.first.displayValue.toString() == widget.qr){
               String ui = FirebaseAuth.instance.currentUser?.uid??"";
               FirebaseFirestore firestore = FirebaseFirestore.instance;
               await firestore.collection("séances").doc(widget.idScience).collection("presence").add({'etudiant':ui});
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("present success")));
-              Navigator.pop(context);
+              Navigator.pop(context);}else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("incorrect qr")));
+
+              }
             }else{
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("error success")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("error scaning")));
 
             }
 
