@@ -115,7 +115,7 @@ class _MainScreenState extends State<HomeScreen> {
                                     SizedBox(height: 10,),
                                     item(Icons.credit_card_rounded, "Science",object.name ),
                                     item(Icons.book, "Type",object.type ),
-                                    item(Icons.dashboard, "Branche",object.type ),
+                                    item(Icons.dashboard, "Branche",object.branche ),
                                     item(Icons.date_range, "Date","${object.day} ${object.time}" ),
                                     item(Icons.maps_home_work_rounded, "Salle",object.room ),
 
