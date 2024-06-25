@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
         .where('name', isLessThan: search + '\uf8ff').get();
     for (var element in querySnapshot.docs) {
       list.add(
-          ScienceObject(name: element.get("name"), time: element.get("time"), type: element.get("type"), id: element.get("id"), day: element.get("day"),room: element.get("room"),qr:  element.get("qr"),branche: element.get("branche"))
+          ScienceObject(name: element.get("name"), time: element.get("time"), type: element.get("type"), id: element.get("id"), day: element.get("day"),room: element.get("room"),qr:  element.get("qr"),branche: element.get("branch"))
       );
     }
     return list;
@@ -89,9 +89,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               color: Colors.grey,
                               width: 100,
                             ),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             item(Icons.credit_card_rounded, "Science",object.name ),
                             item(Icons.book, "Type",object.type ),
+                            item(Icons.dashboard, "Branche",object.branche ),
                             item(Icons.date_range, "Date","${object.day} ${object.time}" ),
                             item(Icons.maps_home_work_rounded, "Salle",object.room ),
 
