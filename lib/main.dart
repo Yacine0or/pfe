@@ -1,5 +1,6 @@
 
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_auth/firebase_auth.dart' as f;
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:project2/files/emploi_de_temp.dart';
@@ -45,11 +46,15 @@ void main() {
   runApp(splashpages(
       key: UniqueKey(),
       onInitializationComplete: () {
-        runApp(MyApp());
+        String uid =  f.FirebaseAuth.instance.currentUser?.uid??"";
+
+        runApp(MyApp(islogin: uid.isNotEmpty,));
       })); //LoginPage());
 }
 
 class MyApp extends StatelessWidget {
+  bool islogin;
+  MyApp({required this.islogin});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
           return AuthProvider();
         })
       ],
-      child: MaterialApp(home: LoginPage()),
+      child: MaterialApp(home: islogin?MyHomePage():LoginPage()),
     );
   }
 }

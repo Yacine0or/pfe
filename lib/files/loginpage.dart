@@ -30,8 +30,7 @@ class _loginpage extends State<LoginPage> {
           Colors.green.shade800,
           Colors.green.shade400
         ])),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: <Widget>[
             SizedBox(
               height: 80,
@@ -130,7 +129,7 @@ class _loginpage extends State<LoginPage> {
                             ),
                           )),
                       SizedBox(
-                        height: 190,
+                        height: 20,
                       ),
                       FadeInUp(
                           duration: Duration(milliseconds: 1600),
