@@ -68,14 +68,13 @@ class _MainScreenState extends State<HomeScreen> {
         children: [
 
           EasyInfiniteDateTimeLine(
+
             activeColor: Colors.green,
             controller: _controller,
             firstDate: DateTime(2024,06,25),
             focusDate: today,
             lastDate: DateTime(2024,06,31),
-            disabledDates: [
 
-            ],
 
             onDateChange: (selectedDate) {
               setState(() {
@@ -86,7 +85,7 @@ class _MainScreenState extends State<HomeScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 13,top: 8),
-            child: Text("Science",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+            child: Text("Séance du jour",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
           ),
           Expanded(
               flex: 6,
@@ -94,7 +93,7 @@ class _MainScreenState extends State<HomeScreen> {
                 future: getData(),
                 builder: (BuildContext context, AsyncSnapshot<List<ScienceObject>> snapshot) {
                   if(snapshot.connectionState == ConnectionState.done){
-                    return snapshot.data?.isEmpty??true?Center(child: Text("Aucun Science"),):ListView.builder(
+                    return snapshot.data?.isEmpty??true?Center(child: Text("Aucune Séance"),):ListView.builder(
                         itemCount: snapshot.data?.length??0,
                         itemBuilder: (context,position){
                           return ScienceModel(science:snapshot.data![position],ontap: (){
@@ -113,7 +112,7 @@ class _MainScreenState extends State<HomeScreen> {
                                       width: 100,
                                     ),
                                     SizedBox(height: 10,),
-                                    item(Icons.credit_card_rounded, "Science",object.name ),
+                                    item(Icons.credit_card_rounded, "Séance",object.name ),
                                     item(Icons.book, "Type",object.type ),
                                     item(Icons.dashboard, "Branche",object.branche ),
                                     item(Icons.date_range, "Date","${object.day} ${object.time}" ),

@@ -36,8 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.book),
+            label: 'Planning',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
