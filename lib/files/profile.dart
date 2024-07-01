@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:project2/files/loginpage.dart';
 
 class ProfileData{
-  String nom,prenom,email,matricule;
+  String nom,prenom,email,matricule,groupe;
 
-  ProfileData({required this.nom,required this.prenom,required this.email,required this.matricule});
+  ProfileData({required this.nom,required this.prenom,required this.email,required this.matricule,required this.groupe});
 }
 
 class ProfileScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
     String uid =  FirebaseAuth.instance.currentUser?.uid??"";
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentSnapshot<Map<String, dynamic>> data = await firestore.collection("étudiants").doc(uid).get();
-    return ProfileData(nom: data.get("nom_etudiant"), prenom: data.get("prenom_etudiant"), email: data.get("email_etudiant"), matricule: data.get("mat_etudiant"));
+    return ProfileData(nom: data.get("nom_etudiant"), prenom: data.get("prenom_etudiant"), email: data.get("email_etudiant"), matricule: data.get("mat_etudiant"),groupe: data.get("group"));
   }
 
 
@@ -50,6 +50,8 @@ class ProfileScreen extends StatelessWidget {
                   item(Icons.person, "Prenom", "${data?.prenom}"),
                   item(Icons.credit_card_rounded, "Matricule", "${data?.matricule}"),
                   item(Icons.email_sharp, "Email", "${data?.email}"),
+                  item(Icons.group, "Groupe", "${data?.groupe}"),
+
                   SizedBox(height: 10,),
                   ElevatedButton(onPressed: () async{
                      await FirebaseAuth.instance.signOut();

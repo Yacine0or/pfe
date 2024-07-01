@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project2/files/scane.dart';
@@ -21,8 +19,8 @@ class ScienceModel extends StatelessWidget {
       margin: EdgeInsets.all(5),
       padding: EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(8)
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(8)
       ),
       child: Column(
         children: [
@@ -41,17 +39,9 @@ class ScienceModel extends StatelessWidget {
                   try{
                     _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
                         context: context,
-                        onCode: (code) async{
-                          if(code==science.qr){
-                            String uid = FirebaseAuth.instance.currentUser?.uid??"";
-                            FirebaseFirestore firestore = FirebaseFirestore.instance;
+                        onCode: (code) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("success $code")));
 
-                            await firestore.collection("séances").doc(science.id).collection("présences").add({'étudiants':uid});
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("present success")));
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("incorrect codeQr")));
-
-                          }
                         });
 
                   }catch(e){

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:time_scheduler_table/time_scheduler_table.dart';
 
 import '../models/science_model.dart';
 import '../models/science_object.dart';
@@ -14,16 +16,36 @@ class _SearchScreenState extends State<SearchScreen> {
 
   String search = "";
 
-  Future<List<ScienceObject>> getData() async{
-    List<ScienceObject> list = [];
+  Future<List<EventModel>> getData() async{
+    String uid =  FirebaseAuth.instance.currentUser?.uid??"";
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    QuerySnapshot<Map<String,dynamic>> querySnapshot = await firestore.collection("séances").where('name', isGreaterThanOrEqualTo: search)
-        .where('name', isLessThan: search + '\uf8ff').get();
-    for (var element in querySnapshot.docs) {
-      list.add(
-          ScienceObject(name: element.get("name"), time: element.get("time"), type: element.get("type"), id: element.get("id"), day: element.get("day"),room: element.get("room"),qr:  element.get("qr"),branche: element.get("branch"))
-      );
+
+    DocumentSnapshot<Map<String, dynamic>> da = await firestore.collection("étudiants").doc(uid).get();
+
+    List<EventModel> list = [];
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore.collection('séances').where("group",isEqualTo: da.get("group")).get();
+
+    var data = querySnapshot.docs;
+
+    for(int i =0;i<6;i++){
+      for(int j=0;j<6;j++){
+        data.forEach((data){
+          if(data["time"] == hours[j] && data["day"] == days[i]){
+            list.add(
+                EventModel(
+                  title: data["name"] + " (${data["type"]})",
+                  columnIndex: j,
+                  rowIndex: i,
+                  color: Colors.green,
+                )
+            );
+          }
+
+        });
+      }
     }
+
+
     return list;
   }
 
@@ -44,65 +66,58 @@ class _SearchScreenState extends State<SearchScreen> {
         ));
   }
 
+  var days = const [ // You can assign any value to columnTitles. For Example : ['Column 1','Column 2','Column 3', ...]
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday"
+  ];
+
+  var hours = const [ // You can assign any value to rowTitles. For Example : ['Row 1','Row 2','Row 3', ...]
+    "08:00 - 09:30",
+    "09:40 - 11:10",
+    "11:20 - 12:50",
+    "13:00 - 14:30",
+    "14:40 - 16:10",
+    "16:20 - 17:50"
+  ];
+
+  TextEditingController textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: "Rechercher Dans les Science",
-            border: InputBorder.none
-          ),
-          onEditingComplete: (){
-
-          },
-          onChanged: (data) {
-
-            setState(() {
-              search = data;
-
-            });
-
-          },
-        ),
-      ),
-      body: FutureBuilder<List<ScienceObject>>(
+      body: FutureBuilder<List<EventModel>>(
         future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<List<ScienceObject>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<EventModel>> snapshot) {
           if(snapshot.connectionState == ConnectionState.done){
-            return snapshot.data?.isEmpty??true?Center(
-              child: Text("Aucun Resultat"),
-            ):ListView.builder(
+            return TimeSchedulerTable(
 
-                itemCount: snapshot.data?.length??0,
-                itemBuilder: (context,position){
-                  return ScienceModel(science:snapshot.data![position],ontap: (){
-                   ScienceObject object = snapshot.data![position];
-                    showBottomSheet(context: context, builder: (context)=>Container(
-                        color: Colors.grey.shade100,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 10),
-                              height: 3,
-                              color: Colors.grey,
-                              width: 100,
-                            ),
-                            const SizedBox(height: 10,),
-                            item(Icons.credit_card_rounded, "Science",object.name ),
-                            item(Icons.book, "Type",object.type ),
-                            item(Icons.dashboard, "Branche",object.branche ),
-                            item(Icons.date_range, "Date","${object.day} ${object.time}" ),
-                            item(Icons.maps_home_work_rounded, "Salle",object.room ),
+              scrollColor: Colors.transparent,
+              cellHeight: 74,
+              cellWidth: 82,
+              columnTitles: days,
+              currentColumnTitleIndex: DateTime.now().weekday - 1,
+              rowTitles: hours,
+              title: "Emploi du Temp",
+              isScrollTrackingVisible: false,
 
-                          ],
-                        )
+              titleStyle: const TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+              eventTitleStyle: const TextStyle(color: Colors.white, fontSize: 10,fontWeight: FontWeight.bold),
+              isBack: false, // back button
+              eventList: snapshot.data!,
+              eventAlert: EventAlert(
+                alertTextController: textController,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12.0),
+                ),
 
 
-                    ));
-                  },);
-                });
+              ),
+            );
           }
           return Center(
             child: CircularProgressIndicator(),
