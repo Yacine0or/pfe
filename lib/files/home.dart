@@ -29,7 +29,7 @@ class _MainScreenState extends State<HomeScreen> {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore
           .collection("séances")
-          .where('day', isEqualTo: dayName.substring(0,3))
+          .where('day', isEqualTo: dayName)
           .get();
 
       debugPrint("size : ${querySnapshot.docs.length}");
